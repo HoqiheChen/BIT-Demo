@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="channel">
+        <item>新闻</item>
+        <item>视频</item>
+        <item>短视频</item>
+        <item>音乐</item>
+        <item>其它</item>
+    </string-array>
+    <string-array name="channel_code">
+        <item>news</item>
+        <item>video</item>
+        <item>short_video</item>
+        <item>music</item>
+        <item>other</item>
+    </string-array>
+</resources>
