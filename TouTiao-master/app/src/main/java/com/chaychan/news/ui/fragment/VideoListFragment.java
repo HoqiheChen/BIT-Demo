@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chaychan.library.BottomBarItem;
 import com.chaychan.news.R;
+import com.chaychan.news.base.BaseFragment;
 import com.chaychan.news.constants.Constant;
 import com.chaychan.news.model.entity.News;
 import com.chaychan.news.model.entity.NewsRecord;
@@ -20,22 +21,20 @@ import com.chaychan.news.model.entity.VideoEntity;
 import com.chaychan.news.model.event.DetailCloseEvent;
 import com.chaychan.news.model.event.TabRefreshCompletedEvent;
 import com.chaychan.news.model.event.TabRefreshEvent;
+import com.chaychan.news.presenter.NewsListPresenter;
+import com.chaychan.news.presenter.view.lNewsListView;
 import com.chaychan.news.ui.activity.NewsDetailActivity;
 import com.chaychan.news.ui.activity.NewsDetailBaseActivity;
 import com.chaychan.news.ui.activity.VideoDetailActivity;
 import com.chaychan.news.ui.activity.WebViewActivity;
-import com.chaychan.news.ui.adapter.MovieListAdapter;
 import com.chaychan.news.ui.adapter.NewsListAdapter;
 import com.chaychan.news.ui.adapter.TinyVideoListAdapter;
 import com.chaychan.news.ui.adapter.VideoListAdapter;
-import com.chaychan.news.base.BaseFragment;
-import com.chaychan.news.presenter.NewsListPresenter;
 import com.chaychan.news.utils.ListUtils;
 import com.chaychan.news.utils.MyJZVideoPlayerStandard;
 import com.chaychan.news.utils.NetWorkUtils;
 import com.chaychan.news.utils.NewsRecordHelper;
 import com.chaychan.news.utils.UIUtils;
-import com.chaychan.news.presenter.view.lNewsListView;
 import com.chaychan.uikit.TipView;
 import com.chaychan.uikit.powerfulrecyclerview.PowerfulRecyclerView;
 import com.chaychan.uikit.refreshlayout.BGANormalRefreshViewHolder;
@@ -55,15 +54,8 @@ import cn.jzvd.JZMediaManager;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdMgr;
 
-/**
- * @author ChayChan
- * @description: 展示每个频道新闻列表的fragment
- * @date 2017/6/16  21:22
- */
-
-public class NewsListFragment extends BaseFragment<NewsListPresenter> implements lNewsListView, BGARefreshLayout.BGARefreshLayoutDelegate, BaseQuickAdapter.RequestLoadMoreListener {
-
-    private static final String TAG = NewsListFragment.class.getSimpleName();
+public class VideoListFragment extends BaseFragment<NewsListPresenter> implements lNewsListView, BGARefreshLayout.BGARefreshLayoutDelegate, BaseQuickAdapter.RequestLoadMoreListener {
+    private static final String TAG = VideoListFragment.class.getSimpleName();
 
     @Bind(R.id.tip_view)
     TipView mTipView;
@@ -109,7 +101,7 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
 
     @Override
     protected int provideContentViewId() {
-        return R.layout.fragment_news_list;
+        return R.layout.fragment_video_list;
     }
 
 
@@ -121,7 +113,7 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
     @Override
     public void initView(View rootView) {
         mRefreshLayout.setDelegate(this);
-        mRvNews.setLayoutManager(new GridLayoutManager(mActivity, 1));
+        mRvNews.setLayoutManager(new GridLayoutManager(mActivity, 2));
         // 设置下拉刷新和上拉加载更多的风格     参数1：应用程序上下文，参数2：是否具有上拉加载更多功能
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(mActivity, false);
         // 设置下拉刷新
@@ -138,6 +130,7 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
 
     @Override
     public void initData() {
+
         mChannelCode = getArguments().getString(Constant.CHANNEL_CODE);
         isVideoList = getArguments().getBoolean(Constant.IS_VIDEO_LIST, false);
         isTinyVideoList = getArguments().getBoolean(Constant.IS_TINY_VIDEO_LIST,false);
@@ -150,8 +143,7 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
     public void initListener() {
         if (isVideoList){
             //如果是视频列表
-//            mNewsAdapter = new VideoListAdapter(mNewsList);
-            mNewsAdapter = new MovieListAdapter(mNewsList);
+            mNewsAdapter = new VideoListAdapter(mNewsList);
         }else if(isTinyVideoList) {
             //如果是小视频列表
             mNewsAdapter = new TinyVideoListAdapter(mNewsList);
@@ -254,7 +246,12 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
 
         //找到最后一组记录，转换成新闻集合并展示
         List<News> newsList = NewsRecordHelper.convertToNewsList(mNewsRecord.getJson());
-        mNewsList.addAll(newsList);//添加到集合中
+        for(News news : newsList){
+            if(news.has_video == true)
+                mNewsList.add(news);
+        }
+//        mNewsList.addAll(newsList);//添加到集合中
+
         mNewsAdapter.notifyDataSetChanged();//刷新adapter
 
         mStateView.showContent();//显示内容
@@ -294,8 +291,12 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
         }
 
         dealRepeat(newList);//处理新闻重复问题
-
-        mNewsList.addAll(0, newList);
+        for(News news:newList){
+            if(news.has_video == true){
+                mNewsList.add(news);
+            }
+        }
+//        mNewsList.addAll(0, newList);
         mNewsAdapter.notifyDataSetChanged();
 
         mTipView.show(tipInfo);
@@ -481,13 +482,13 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
     @Override
     public void onStart() {
         super.onStart();
-        registerEventBus(NewsListFragment.this);
+        registerEventBus(VideoListFragment.this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        unregisterEventBus(NewsListFragment.this);
+        unregisterEventBus(VideoListFragment.this);
     }
 
     @Override
@@ -495,5 +496,4 @@ public class NewsListFragment extends BaseFragment<NewsListPresenter> implements
         super.onDestroy();
         KLog.e("onDestroy" + mChannelCode);
     }
-
 }

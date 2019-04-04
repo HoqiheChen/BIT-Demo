@@ -4,6 +4,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.text.TextUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chaychan.news.R;
 import com.chaychan.news.model.entity.NewsDetail;

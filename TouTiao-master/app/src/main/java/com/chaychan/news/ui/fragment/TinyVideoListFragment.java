@@ -135,6 +135,7 @@ public class TinyVideoListFragment extends BaseFragment<NewsListPresenter> imple
 
     @Override
     public void initData() {
+
         mChannelCode = getArguments().getString(Constant.CHANNEL_CODE);
         isVideoList = getArguments().getBoolean(Constant.IS_VIDEO_LIST, false);
         isTinyVideoList = getArguments().getBoolean(Constant.IS_TINY_VIDEO_LIST,false);
@@ -250,7 +251,12 @@ public class TinyVideoListFragment extends BaseFragment<NewsListPresenter> imple
 
         //找到最后一组记录，转换成新闻集合并展示
         List<News> newsList = NewsRecordHelper.convertToNewsList(mNewsRecord.getJson());
-        mNewsList.addAll(newsList);//添加到集合中
+        for(News news : newsList){
+            if(news.has_video == true)
+                mNewsList.add(news);
+        }
+//        mNewsList.addAll(newsList);//添加到集合中
+
         mNewsAdapter.notifyDataSetChanged();//刷新adapter
 
         mStateView.showContent();//显示内容
@@ -290,8 +296,12 @@ public class TinyVideoListFragment extends BaseFragment<NewsListPresenter> imple
         }
 
         dealRepeat(newList);//处理新闻重复问题
-
-        mNewsList.addAll(0, newList);
+        for(News news:newList){
+            if(news.has_video == true){
+                mNewsList.add(news);
+            }
+        }
+//        mNewsList.addAll(0, newList);
         mNewsAdapter.notifyDataSetChanged();
 
         mTipView.show(tipInfo);

@@ -6,26 +6,22 @@ import android.text.TextUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.news.R;
-import com.chaychan.news.listener.VideoStateListenerAdapter;
 import com.chaychan.news.model.entity.News;
-import com.chaychan.news.utils.GlideUtils;
-import com.chaychan.news.utils.MyJZVideoPlayerStandard;
 import com.chaychan.news.utils.TimeUtils;
-import com.chaychan.news.utils.UIUtils;
-import com.chaychan.news.utils.VideoPathDecoder;
-import com.socks.library.KLog;
+
 
 import java.util.List;
 
-import cn.jzvd.JzvdStd;
+/*
+*    Author:GeChen
+*    Date:2019/4/4
+*    Description:电影适配器
+*/
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
+public class MovieListAdapter extends BaseQuickAdapter<News, BaseViewHolder> {
 
-public class TinyVideoListAdapter extends BaseQuickAdapter<News, BaseViewHolder> {
-
-    public TinyVideoListAdapter(@Nullable List<News> data) {
-        super(R.layout.item_tiny_video_list, data);
+    public MovieListAdapter(@Nullable List<News> data) {
+        super(R.layout.item_movie_list, data);
     }
 
     @Override
@@ -34,9 +30,15 @@ public class TinyVideoListAdapter extends BaseQuickAdapter<News, BaseViewHolder>
             //如果没有标题，则直接跳过
             return;
         }
-        helper.setVisible(R.id.ll_title, true);
-        helper.setBackgroundRes(R.id.ll_title,R.mipmap.cover_tiny_video);
+
+        helper.setVisible(R.id.ll_title, true);//显示标题栏
+        helper.setText(R.id.tv_title, "建党伟业");
+        helper.setText(R.id.tv_type, "剧情片");
+        helper.setBackgroundRes(R.id.ll_title,R.mipmap.cover_movie);
+        helper.setText(R.id.tv_info,"庆祝中共建党九十周年的献礼影片。");
         helper.setVisible(R.id.ll_duration, true)//显示时长
                 .setText(R.id.tv_duration, TimeUtils.secToTime(news.video_duration));//设置时长
+
+
     }
 }

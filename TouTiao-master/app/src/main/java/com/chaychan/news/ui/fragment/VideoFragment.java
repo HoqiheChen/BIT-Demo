@@ -36,7 +36,7 @@ public class VideoFragment extends BaseFragment {
     ViewPager mVpContent;
 
     private List<Channel> mChannelList = new ArrayList<>();
-    private List<NewsListFragment> mFrgamentList = new ArrayList<>();
+    private List<NewsListFragment> mFragmentList = new ArrayList<>();
 
     @Override
     protected BasePresenter createPresenter() {
@@ -77,16 +77,16 @@ public class VideoFragment extends BaseFragment {
             bundle.putBoolean(Constant.IS_VIDEO_LIST, true);//是否是视频列表页面,]true
             bundle.putBoolean(Constant.IS_TINY_VIDEO_LIST,false);
             newsListFragment.setArguments(bundle);
-            mFrgamentList.add(newsListFragment);//添加到集合中
+            mFragmentList.add(newsListFragment);//添加到集合中
         }
     }
 
     @Override
     public void initListener() {
 
-        ChannelPagerAdapter channelPagerAdapter = new ChannelPagerAdapter(mFrgamentList,mChannelList,getChildFragmentManager());
+        ChannelPagerAdapter channelPagerAdapter = new ChannelPagerAdapter(mFragmentList,mChannelList,getChildFragmentManager());
         mVpContent.setAdapter(channelPagerAdapter);
-        mVpContent.setOffscreenPageLimit(mFrgamentList.size());
+        mVpContent.setOffscreenPageLimit(mFragmentList.size());
 
         mVpContent.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
