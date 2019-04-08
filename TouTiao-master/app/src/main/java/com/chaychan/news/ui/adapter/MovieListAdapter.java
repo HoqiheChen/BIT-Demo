@@ -32,10 +32,12 @@ public class MovieListAdapter extends BaseQuickAdapter<News, BaseViewHolder> {
         }
 
         helper.setVisible(R.id.ll_title, true);//显示标题栏
+        helper.setVisible(R.id.fr,true);
         helper.setText(R.id.tv_title, "建党伟业");
         helper.setText(R.id.tv_type, "剧情片");
         helper.setBackgroundRes(R.id.ll_title,R.mipmap.cover_movie);
-        helper.setText(R.id.tv_info,"庆祝中共建党九十周年的献礼影片。");
+        helper.setText(R.id.tv_info,"《建党伟业》（Beginning of the Great Revival）是为庆祝中国共产党建党九十周年而制作的献礼影片。该片由韩三平、黄建新执导（海外部分由李少>>");
+
         helper.setVisible(R.id.ll_duration, true)//显示时长
                 .setText(R.id.tv_duration, TimeUtils.secToTime(news.video_duration));//设置时长
 
